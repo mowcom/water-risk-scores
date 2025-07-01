@@ -21,8 +21,9 @@ def save_outputs(final_df):
     csv_cols = [
         'WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 
         'surface_water_dist_m', 'surface_casing_ft', 'completion_year', 
-        'domestic_wells_1km', 'Water_Safeguarded_m3_yr', 'Water_Safeguarded_acft_yr',
-        'Data_Gap_Flag'
+        'domestic_wells_1km', 'Drastic_Class', 'Drastic_Factor', 
+        'Domestic_Demand_Wtd_m3_yr', 'P_Leak', 'Water_Safeguarded_m3_yr', 
+        'Water_Safeguarded_acft_yr', 'Contaminant_Load_Removed_m3_yr', 'Data_Gap_Flag'
     ]
     
     # Create a DataFrame with the correct index before saving

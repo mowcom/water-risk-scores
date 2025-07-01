@@ -90,7 +90,7 @@ if results_df is not None:
     st.header("Risk Assessment Results")
     st.markdown("The table below shows the final risk scores and tiers for each well.")
     
-    display_cols = ['WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 'surface_water_dist_m', 'completion_year', 'domestic_wells_1km', 'Water_Safeguarded_m3_yr', 'Water_Safeguarded_acft_yr']
+    display_cols = ['WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 'surface_water_dist_m', 'completion_year', 'domestic_wells_1km', 'P_Leak', 'Water_Safeguarded_m3_yr', 'Water_Safeguarded_acft_yr']
     st.dataframe(results_df.set_index('API')[display_cols])
 
     st.header("Per-Well Dossier")
@@ -117,13 +117,118 @@ if results_df is not None:
             else:
                 st.warning("Map image not found. Please run the analysis.")
 
-        # --- Metrics Display ---
+        # --- Key Highlights and Metrics Display ---
         with col2:
-            st.subheader(f"Metrics for: {well_data_row['WELL_NAME']}")
+            st.subheader(f"Key Highlights: {well_data_row['WELL_NAME']}")
+            
             if os.path.exists(JSON_PATH):
                 with open(JSON_PATH) as f:
                     all_metrics = json.load(f)
-                st.json(all_metrics.get(str(well_api), "Metrics not found."))
+                well_metrics = all_metrics.get(str(well_api), {})
+                
+                if well_metrics:
+                    # Key highlights with info bubbles
+                    col2a, col2b = st.columns(2)
+                    
+                    with col2a:
+                        st.metric(
+                            label="Risk Score", 
+                            value=f"{well_metrics.get('final_score', 'N/A')}",
+                            help="Overall risk score (0-100) based on weighted factors: Aquifer (30%), Surface Water (20%), Casing/Age (20%), Historical Spill (15%), Human Receptors (15%)"
+                        )
+                        
+                        st.metric(
+                            label="Surface Water Distance", 
+                            value=f"{well_metrics.get('surface_water_dist_m', 'N/A'):.0f} m",
+                            help="Distance to nearest surface water body (streams, rivers, lakes). Closer wells pose higher contamination risk to surface water."
+                        )
+                        
+                        st.metric(
+                            label="Completion Year", 
+                            value=f"{well_metrics.get('completion_year', 'N/A')}",
+                            help="Year the well was completed. Older wells typically have less robust casing and higher failure risk."
+                        )
+                    
+                    with col2b:
+                        st.metric(
+                            label="Domestic Wells (1km)", 
+                            value=f"{well_metrics.get('domestic_wells_1km', 'N/A')}",
+                            help="Number of domestic water wells within 1km radius. More domestic wells means higher potential impact on drinking water supply."
+                        )
+                        
+                        st.metric(
+                            label="Water Safeguarded", 
+                            value=f"{well_metrics.get('Water_Safeguarded_acft_yr', 'N/A'):.2f} ac-ft/yr",
+                            help="Enhanced calculation: Annual volume of potable water supply protected by plugging this well. Uses distance-weighted domestic demand, DRASTIC vulnerability, and leak probability modeling."
+                        )
+                        
+                        st.metric(
+                            label="Surface Casing Depth", 
+                            value=f"{well_metrics.get('surface_casing_ft', 'N/A')} ft",
+                            help="Depth of surface casing protection. Deeper casing provides better protection for shallow groundwater aquifers."
+                        )
+                    
+                    # Aquifer status with color coding
+                    aquifer_status = well_metrics.get('live_aquifer_check', 'Unknown')
+                    if aquifer_status == 'Intersect':
+                        st.error(f"⚠️ **Aquifer Impact**: Well intersects live aquifer", help="This well penetrates an active groundwater aquifer, increasing contamination risk to drinking water sources.")
+                    else:
+                        st.success(f"✅ **Aquifer Impact**: No live aquifer intersection", help="This well does not penetrate major drinking water aquifers, reducing groundwater contamination risk.")
+                    
+                    # Enhanced Modeling Metrics
+                    st.subheader("Enhanced Risk Modeling")
+                    enh_col1, enh_col2 = st.columns(2)
+                    
+                    with enh_col1:
+                        st.metric(
+                            label="DRASTIC Vulnerability", 
+                            value=f"{well_metrics.get('Drastic_Class', 'N/A')} ({well_metrics.get('Drastic_Factor', 'N/A')})",
+                            help="Aquifer vulnerability classification based on DRASTIC methodology. Higher values indicate greater susceptibility to contamination."
+                        )
+                        st.metric(
+                            label="Leak Probability", 
+                            value=f"{well_metrics.get('P_Leak', 'N/A'):.3f}",
+                            help="Probability of leak occurrence based on risk score and aquifer vulnerability using sigmoid modeling."
+                        )
+                    
+                    with enh_col2:
+                        st.metric(
+                            label="Distance-Weighted Demand", 
+                            value=f"{well_metrics.get('Domestic_Demand_Wtd_m3_yr', 'N/A'):.0f} m³/yr",
+                            help="Total domestic water demand within 1km, weighted by distance. Closer wells have higher weights in the calculation."
+                        )
+                        if well_metrics.get('Contaminant_Load_Removed_m3_yr'):
+                            st.metric(
+                                label="Contaminant Load Avoided", 
+                                value=f"{well_metrics.get('Contaminant_Load_Removed_m3_yr', 'N/A'):.0f} m³/yr",
+                                help="Annual volume of potential contamination prevented by plugging this well, based on estimated leak rates and probability."
+                            )
+                    
+                    # Component scores breakdown
+                    st.subheader("Risk Component Breakdown")
+                    scores_col1, scores_col2 = st.columns(2)
+                    
+                    with scores_col1:
+                        st.metric("Aquifer Score", f"{well_metrics.get('aquifer_score', 'N/A')}/30", help="Score based on aquifer sensitivity and well's proximity/intersection with groundwater sources")
+                        st.metric("Surface Water Score", f"{well_metrics.get('surface_water_score', 'N/A')}/20", help="Score based on distance to surface water bodies - closer distances = higher scores")
+                        st.metric("Casing/Age Score", f"{well_metrics.get('casing_score', 'N/A')}/20", help="Score based on surface casing depth and well age - older wells with shallow casing = higher scores")
+                    
+                    with scores_col2:
+                        st.metric("Historical Spill Score", f"{well_metrics.get('spill_score', 'N/A')}/15", help="Score based on documented spill incidents in the area - more spills = higher scores")
+                        st.metric("Human Receptors Score", f"{well_metrics.get('receptors_score', 'N/A')}/15", help="Score based on nearby domestic wells and population density - more people = higher scores")
+                        
+                    # Well links
+                    st.subheader("Official Records")
+                    if well_metrics.get('WELL_BROWSE_LINK'):
+                        st.markdown(f"[🔗 Well Browse (OCC)]({well_metrics['WELL_BROWSE_LINK']})")
+                    if well_metrics.get('WELL_RECORDS_DOCS'):
+                        st.markdown(f"[📄 Well Records (OCC)]({well_metrics['WELL_RECORDS_DOCS']})")
+                    
+                    # Expandable full JSON
+                    with st.expander("View Full Technical Details"):
+                        st.json(well_metrics)
+                else:
+                    st.warning("Well metrics not found in JSON file.")
             else:
                  st.warning("Metrics JSON file not found. Please run the analysis.")
 else:

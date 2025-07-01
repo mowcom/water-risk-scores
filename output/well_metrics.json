@@ -34,10 +34,15 @@
         "domestic_wells_1km":1,
         "live_aquifer_check":"No Intersect",
         "surface_water_dist_m":72.35,
+        "Drastic_Class":"High",
+        "Drastic_Factor":0.8,
+        "Domestic_Demand_Wtd_m3_yr":1775.1,
         "final_score":43,
         "risk_tier":"Moderate",
-        "Water_Safeguarded_m3_yr":129.0,
-        "Water_Safeguarded_acft_yr":0.105
+        "P_Leak":0.226,
+        "Water_Safeguarded_m3_yr":400.8,
+        "Water_Safeguarded_acft_yr":0.325,
+        "Contaminant_Load_Removed_m3_yr":263.7
     },
     "3503921266":{
         "Data_Gap_Flag":0,
@@ -74,10 +79,15 @@
         "domestic_wells_1km":0,
         "live_aquifer_check":"Intersect",
         "surface_water_dist_m":292.77,
+        "Drastic_Class":"High",
+        "Drastic_Factor":0.8,
+        "Domestic_Demand_Wtd_m3_yr":0.0,
         "final_score":26,
         "risk_tier":"Low",
+        "P_Leak":0.031,
         "Water_Safeguarded_m3_yr":0.0,
-        "Water_Safeguarded_acft_yr":0.0
+        "Water_Safeguarded_acft_yr":0.0,
+        "Contaminant_Load_Removed_m3_yr":36.6
     },
     "3506121229":{
         "Data_Gap_Flag":0,
@@ -114,10 +124,15 @@
         "domestic_wells_1km":4,
         "live_aquifer_check":"Intersect",
         "surface_water_dist_m":355.25,
+        "Drastic_Class":"High",
+        "Drastic_Factor":0.8,
+        "Domestic_Demand_Wtd_m3_yr":6308.3,
         "final_score":75,
         "risk_tier":"High",
-        "Water_Safeguarded_m3_yr":900.0,
-        "Water_Safeguarded_acft_yr":0.73
+        "P_Leak":0.772,
+        "Water_Safeguarded_m3_yr":4872.8,
+        "Water_Safeguarded_acft_yr":3.95,
+        "Contaminant_Load_Removed_m3_yr":902.2
     },
     "3504723141":{
         "Data_Gap_Flag":0,
@@ -154,10 +169,15 @@
         "domestic_wells_1km":0,
         "live_aquifer_check":"Intersect",
         "surface_water_dist_m":113.43,
+        "Drastic_Class":"High",
+        "Drastic_Factor":0.8,
+        "Domestic_Demand_Wtd_m3_yr":0.0,
         "final_score":37,
         "risk_tier":"Moderate",
+        "P_Leak":0.12,
         "Water_Safeguarded_m3_yr":0.0,
-        "Water_Safeguarded_acft_yr":0.0
+        "Water_Safeguarded_acft_yr":0.0,
+        "Contaminant_Load_Removed_m3_yr":140.3
     },
     "3500320743":{
         "Data_Gap_Flag":0,
@@ -194,9 +214,14 @@
         "domestic_wells_1km":2,
         "live_aquifer_check":"Intersect",
         "surface_water_dist_m":312.13,
+        "Drastic_Class":"High",
+        "Drastic_Factor":0.8,
+        "Domestic_Demand_Wtd_m3_yr":2275.4,
         "final_score":77,
         "risk_tier":"High",
-        "Water_Safeguarded_m3_yr":462.0,
-        "Water_Safeguarded_acft_yr":0.375
+        "P_Leak":0.779,
+        "Water_Safeguarded_m3_yr":1771.9,
+        "Water_Safeguarded_acft_yr":1.436,
+        "Contaminant_Load_Removed_m3_yr":909.5
     }
 }
