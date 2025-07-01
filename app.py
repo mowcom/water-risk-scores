@@ -97,11 +97,11 @@ if results_df is not None:
             st.write(f"- **Human Receptors (15%)**: {receptor_score:.1f}/15")
         
         with scores_col2:
-            # Aquifer status with enhanced explanation
-            if hasattr(well_data_row, 'live_aquifer_check'):
-                aquifer_status = well_data_row.get('live_aquifer_check', 'Unknown')
-            else:
-                aquifer_status = 'Check CSV data'
+            # Aquifer status with enhanced explanation - use JSON metrics data
+            from data_models import load_well_metrics
+            all_metrics = load_well_metrics()
+            well_metrics = all_metrics.get(str(well_api), {})
+            aquifer_status = well_metrics.get('live_aquifer_check', 'Unknown')
             
             if 'Intersect' in str(aquifer_status):
                 st.error(f"⚠️ **Aquifer Impact**: Well intersects live aquifer")
