@@ -93,6 +93,95 @@ if results_df is not None:
     display_cols = ['WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 'surface_water_dist_m', 'completion_year', 'domestic_wells_1km', 'P_Leak', 'Water_Safeguarded_m3_yr', 'Water_Safeguarded_acft_yr']
     st.dataframe(results_df.set_index('API')[display_cols])
 
+    # Water unit explanation
+    st.info("💧 **What is ac-ft/yr?** An acre-foot per year (ac-ft/yr) is the volume of water covering one acre to a depth of one foot annually. One acre-foot equals ~326,000 gallons or enough to supply 6-7 rural households for a year.")
+
+    st.header("📊 How We Calculate These Numbers")
+    
+    with st.expander("🔬 **Enhanced Water Safeguarded Methodology** - Click to expand detailed explanation"):
+        st.markdown("""
+        ### Overview
+        Our enhanced methodology calculates how much potable water supply would be protected by plugging each orphan well. This goes far beyond simple well counts to provide scientifically robust estimates.
+        
+        ### Step-by-Step Calculation Process
+        
+        #### 1. **Risk Score Calculation** (0-100 scale)
+        The code calculates a weighted risk score based on five components:
+        - **Aquifer Proximity/Intersection (30%)**: Wells intersecting live aquifers get higher scores
+        - **Surface Water Distance (20%)**: Closer to streams/rivers = higher risk  
+        - **Casing & Age (20%)**: Older wells with shallow surface casing = higher risk
+        - **Historical Spills (15%)**: Areas with documented contamination incidents
+        - **Human Receptors (15%)**: Number of nearby domestic wells and population density
+        
+        #### 2. **DRASTIC Vulnerability Assessment**
+        ```python
+        drastic_factor = get_drastic_factor(well_location)  # 0.2 to 1.0
+        ```
+        - **Purpose**: Determines how easily contaminants can reach groundwater
+        - **Scale**: 1.0 = Very High vulnerability, 0.2 = Very Low vulnerability  
+        - **Current Implementation**: Uses simplified mapping (all wells = 0.8 "High")
+        - **Future Enhancement**: Would integrate actual OWRB DRASTIC raster data
+        
+        #### 3. **Distance-Weighted Domestic Demand**
+        ```python
+        demand = distance_weighted_demand(well_pt, domestic_wells, county_data, county)
+        ```
+        - **Purpose**: Calculates how much water demand exists near each well
+        - **Method**: 
+          - Finds all domestic wells within 1km radius
+          - Gets county-specific water use per well (e.g., Haskell County: 3,000 m³/well/year)
+          - Applies distance weighting: `weight = max(0, 1 - distance/1000)`
+          - Sums: `Σ(county_use_per_well × distance_weight)`
+        - **Example**: Well with 4 domestic wells at varying distances = 6,308 m³/yr demand
+        
+        #### 4. **Leak Probability Model**
+        ```python
+        p_leak = sigmoid_prob(risk_score) * drastic_factor
+        sigmoid_prob(score) = 1 / (1 + exp(-(score-50)/7.5))
+        ```
+        - **Purpose**: Converts risk score to actual probability of contamination
+        - **Method**: Uses sigmoid curve calibrated so score 67 → ~0.9 base probability
+        - **DRASTIC Adjustment**: Multiplies by vulnerability factor
+        - **Example**: Score 75 × DRASTIC 0.8 = 0.772 leak probability
+        
+        #### 5. **Final Water Safeguarded Calculation**
+        ```python
+        water_safeguarded = distance_weighted_demand × leak_probability
+        ```
+        - **Formula**: `Demand (m³/yr) × P(leak) = Protected Water (m³/yr)`
+        - **Logic**: Higher demand + higher leak risk = more water protected by plugging
+        - **Unit Conversion**: `acre-feet = m³ × 0.000811`
+        
+        ### Real Example: KING-OH #38A Well
+        1. **Risk Score**: 75 (High risk tier)
+        2. **DRASTIC Factor**: 0.8 (High aquifer vulnerability)  
+        3. **Domestic Demand**: 6,308 m³/yr (4 nearby wells in Haskell County)
+        4. **Leak Probability**: sigmoid(75) × 0.8 = 0.965 × 0.8 = 0.772
+        5. **Water Safeguarded**: 6,308 × 0.772 = **4,872 m³/yr (3.95 ac-ft/yr)**
+        
+        ### Additional Metrics
+        
+        #### **Contaminant Load Avoided**
+        ```python
+        contam_load = mean_leak_rate_m3_day × 365 × leak_probability
+        ```
+        - **Purpose**: Estimates contaminated water volume prevented
+        - **Assumptions**: Leak rates 0.5-5.9 m³/day (average 3.2 m³/day)
+        - **Example**: 3.2 × 365 × 0.772 = 902 m³/yr contamination avoided
+        
+        #### **Monte Carlo Uncertainty (Optional)**
+        When enabled, runs 10,000 simulations varying:
+        - **Demand uncertainty**: ±20% around mean estimate
+        - **Probability uncertainty**: Beta distribution around calculated value
+        - **Output**: 5th, 50th, 95th percentile confidence intervals
+        
+        ### Why This Matters
+        - **Prioritization**: Helps identify which wells protect the most water supply
+        - **Economic Value**: Quantifies benefit of plugging efforts in water volume terms
+        - **Scientific Rigor**: Uses probability modeling instead of simple linear scaling
+        - **Transparency**: All calculations are reproducible and documented
+        """)
+    
     st.header("Per-Well Dossier")
     
     # --- Well Selector ---
@@ -171,9 +260,11 @@ if results_df is not None:
                     # Aquifer status with color coding
                     aquifer_status = well_metrics.get('live_aquifer_check', 'Unknown')
                     if aquifer_status == 'Intersect':
-                        st.error(f"⚠️ **Aquifer Impact**: Well intersects live aquifer", help="This well penetrates an active groundwater aquifer, increasing contamination risk to drinking water sources.")
+                        st.error(f"⚠️ **Aquifer Impact**: Well intersects live aquifer")
+                        st.caption("This well penetrates an active groundwater aquifer, increasing contamination risk to drinking water sources.")
                     else:
-                        st.success(f"✅ **Aquifer Impact**: No live aquifer intersection", help="This well does not penetrate major drinking water aquifers, reducing groundwater contamination risk.")
+                        st.success(f"✅ **Aquifer Impact**: No live aquifer intersection")
+                        st.caption("This well does not penetrate major drinking water aquifers, reducing groundwater contamination risk.")
                     
                     # Enhanced Modeling Metrics
                     st.subheader("Enhanced Risk Modeling")
