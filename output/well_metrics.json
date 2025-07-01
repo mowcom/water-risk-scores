@@ -36,12 +36,12 @@
         "surface_water_dist_m":72.35,
         "Drastic_Class":"High",
         "Drastic_Factor":0.8,
-        "Domestic_Demand_Wtd_m3_yr":1646.1,
+        "Domestic_Demand_Wtd_m3_yr":1184.7,
         "final_score":43,
         "risk_tier":"Moderate",
         "P_Leak":0.226,
-        "Water_Safeguarded_m3_yr":371.7,
-        "Water_Safeguarded_acft_yr":0.301,
+        "Water_Safeguarded_m3_yr":267.5,
+        "Water_Safeguarded_acft_yr":0.217,
         "Contaminant_Load_Removed_m3_yr":263.7
     },
     "3503921266":{
@@ -126,12 +126,12 @@
         "surface_water_dist_m":355.25,
         "Drastic_Class":"High",
         "Drastic_Factor":0.8,
-        "Domestic_Demand_Wtd_m3_yr":7252.1,
+        "Domestic_Demand_Wtd_m3_yr":3270.3,
         "final_score":75,
         "risk_tier":"High",
         "P_Leak":0.772,
-        "Water_Safeguarded_m3_yr":5601.8,
-        "Water_Safeguarded_acft_yr":4.541,
+        "Water_Safeguarded_m3_yr":2526.2,
+        "Water_Safeguarded_acft_yr":2.048,
         "Contaminant_Load_Removed_m3_yr":902.2
     },
     "3504723141":{
@@ -216,12 +216,12 @@
         "surface_water_dist_m":312.13,
         "Drastic_Class":"High",
         "Drastic_Factor":0.8,
-        "Domestic_Demand_Wtd_m3_yr":2683.4,
+        "Domestic_Demand_Wtd_m3_yr":2434.5,
         "final_score":77,
         "risk_tier":"High",
         "P_Leak":0.779,
-        "Water_Safeguarded_m3_yr":2089.6,
-        "Water_Safeguarded_acft_yr":1.694,
+        "Water_Safeguarded_m3_yr":1895.8,
+        "Water_Safeguarded_acft_yr":1.537,
         "Contaminant_Load_Removed_m3_yr":909.5
     }
 }
