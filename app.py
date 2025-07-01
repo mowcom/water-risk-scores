@@ -37,8 +37,7 @@ def run_full_analysis():
     st.experimental_rerun()
 
 # --- Main App UI ---
-st.title("Orphan Well Water Pollution Risk Assessment")
-st.markdown("*Enhanced with GPT-4 AI equivalents and sophisticated DRASTIC vulnerability modeling*")
+st.title("CH4mber Technologies: Orphan Gas Well Plugging: Water Pollution Risk Assessment")
 
 st.markdown("""
 This application displays pre-computed risk assessments for orphan wells in Oklahoma using **enhanced risk modeling only**.
