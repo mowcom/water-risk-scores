@@ -110,13 +110,16 @@ if results_df is not None:
                 st.success(f"✅ **Aquifer Impact**: No live aquifer intersection")
                 st.caption("This well does not penetrate major drinking water aquifers, reducing groundwater contamination risk.")
             
-            # DRASTIC explanation for this specific well
+            # Quick DRASTIC summary for this specific well
+            drastic_factor = well_data_row.get('Drastic_Factor', 0.5)
+            protection_level = 'excellent' if drastic_factor <= 0.2 else 'good' if drastic_factor <= 0.4 else 'moderate' if drastic_factor <= 0.6 else 'limited' if drastic_factor <= 0.8 else 'very limited'
+            
             st.info(f"""
-            **DRASTIC Vulnerability for {well_data_row['WELL_NAME']}:**
+            **DRASTIC Summary for {well_data_row['WELL_NAME']}:**
             
-            The geological conditions at this location provide {'excellent' if well_data_row.get('Drastic_Factor', 0.5) <= 0.2 else 'good' if well_data_row.get('Drastic_Factor', 0.5) <= 0.4 else 'moderate' if well_data_row.get('Drastic_Factor', 0.5) <= 0.6 else 'limited'} natural protection against groundwater contamination.
+            Geological conditions provide **{protection_level} natural protection** against groundwater contamination (factor: {drastic_factor}).
             
-            See the methodology section above for detailed DRASTIC factor explanations.
+            See Enhanced Risk Modeling section above for detailed vulnerability metrics.
             """)
 
 else:
