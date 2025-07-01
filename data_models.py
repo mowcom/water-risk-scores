@@ -23,11 +23,6 @@ def load_results_from_disk():
         # Ensure API column is properly formatted as int64 for consistent indexing
         results_df['API'] = results_df['API'].astype('int64')
         
-        # Debug info for troubleshooting
-        if len(results_df) > 0:
-            sample_row = results_df.iloc[0]
-            st.sidebar.info(f"📊 Data loaded: {len(results_df)} wells\n\nSample (first row):\n- API: {sample_row['API']}\n- Well: {sample_row['WELL_NAME']}\n- Water Safeguarded: {sample_row.get('Water_Safeguarded_acft_yr', 'N/A'):.3f} ac-ft/yr")
-            
         return results_df
     return None
 
