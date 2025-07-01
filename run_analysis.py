@@ -23,7 +23,9 @@ def save_outputs(final_df):
         'surface_water_dist_m', 'surface_casing_ft', 'completion_year', 
         'domestic_wells_1km', 'Drastic_Class', 'Drastic_Factor', 
         'Domestic_Demand_Wtd_m3_yr', 'P_Leak', 'Water_Safeguarded_m3_yr', 
-        'Water_Safeguarded_acft_yr', 'Contaminant_Load_Removed_m3_yr', 'Data_Gap_Flag'
+        'Water_Safeguarded_acft_yr', 'AI_GPT4_Training_Equivalent', 
+        'AI_GPT4_Queries_Per_Year', 'AI_Claude_Queries_Per_Year', 'AI_H100_Cluster_Hours', 'AI_Primary_Comparison',
+        'Contaminant_Load_Removed_m3_yr', 'Data_Gap_Flag'
     ]
     
     # Create a DataFrame with the correct index before saving

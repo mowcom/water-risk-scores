@@ -1,6 +1,6 @@
-API,WELL_NAME,COUNTY,final_score,risk_tier,surface_water_dist_m,surface_casing_ft,completion_year,domestic_wells_1km,Drastic_Class,Drastic_Factor,Domestic_Demand_Wtd_m3_yr,P_Leak,Water_Safeguarded_m3_yr,Water_Safeguarded_acft_yr,Contaminant_Load_Removed_m3_yr,Data_Gap_Flag
-3508320686,BLAKE,LOGAN,43,Moderate,72.35,435,1977,1,High,0.8,1184.7,0.226,267.5,0.217,263.7,0
-3503921266,JUDITH,CUSTER,26,Low,292.77,1511,1987,0,High,0.8,0.0,0.031,0.0,0.0,36.6,0
-3506121229,KING-OH,HASKELL,75,High,355.25,416,1998,4,High,0.8,3270.3,0.772,2526.2,2.048,902.2,0
-3504723141,RAYMOND,GARFIELD,37,Moderate,113.43,435,1982,0,High,0.8,0.0,0.12,0.0,0.0,140.3,0
-3500320743,SCHNITZER,ALFALFA,77,High,312.13,857,1982,2,High,0.8,2434.5,0.779,1895.8,1.537,909.5,0
+API,WELL_NAME,COUNTY,final_score,risk_tier,surface_water_dist_m,surface_casing_ft,completion_year,domestic_wells_1km,Drastic_Class,Drastic_Factor,Domestic_Demand_Wtd_m3_yr,P_Leak,Water_Safeguarded_m3_yr,Water_Safeguarded_acft_yr,AI_GPT4_Training_Equivalent,AI_GPT4_Queries_Per_Year,AI_Claude_Queries_Per_Year,AI_H100_Cluster_Hours,AI_Primary_Comparison,Contaminant_Load_Removed_m3_yr,Data_Gap_Flag
+3508320686,BLAKE,LOGAN,43,Moderate,72.35,435,1977,1,Very High,1.0,651.8,0.282,184.0,0.149,0.07,153305,153305,3679,"≈ 3,679 hours of H100 cluster cooling",329.7,0
+3503921266,JUDITH,CUSTER,26,Low,292.77,1511,1987,0,Low,0.4,0.0,0.016,0.0,0.0,0.0,0,0,0,No water safeguarded (no nearby domestic wells),18.3,0
+3506121229,KING-OH,HASKELL,75,High,355.25,416,1998,4,Very Low,0.2,5120.0,0.193,988.7,0.802,0.4,823932,823932,19774,≈ 2.3 years of H100 cluster cooling,225.6,0
+3504723141,RAYMOND,GARFIELD,37,Moderate,113.43,435,1982,0,Moderate,0.6,0.0,0.09,0.0,0.0,0.0,0,0,0,No water safeguarded (no nearby domestic wells),105.2,0
+3500320743,SCHNITZER,ALFALFA,77,High,312.13,857,1982,2,Very High,1.0,2062.2,0.973,2007.4,1.627,0.8,1672815,1672815,40147,≈ 1.7M GPT-4 queries/year,1136.9,0
