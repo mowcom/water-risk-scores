@@ -67,6 +67,11 @@ This app provides a reproducible workflow for screening environmental risks asso
 - **High:** Score >= 60
 - **Moderate:** Score 30 - 59
 - **Low:** Score < 30
+
+**Water Safeguarded Metric:**
+Estimates the annual volume of potable water supply that would be protected by plugging each well, based on nearby domestic wells and risk score.
+- Formula: Domestic Wells × 300 m³/well/yr × (Risk Score ÷ 100)
+- Based on USGS average self-supplied domestic use (~77 gal/person/day)
 """)
 st.sidebar.title("Scoring Rubric")
 st.sidebar.json(json.dumps({
@@ -85,7 +90,7 @@ if results_df is not None:
     st.header("Risk Assessment Results")
     st.markdown("The table below shows the final risk scores and tiers for each well.")
     
-    display_cols = ['WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 'surface_water_dist_m', 'completion_year']
+    display_cols = ['WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 'surface_water_dist_m', 'completion_year', 'Water_Safeguarded_m3_yr', 'Water_Safeguarded_acft_yr']
     st.dataframe(results_df.set_index('API')[display_cols])
 
     st.header("Per-Well Dossier")

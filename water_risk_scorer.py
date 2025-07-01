@@ -18,6 +18,10 @@ WEIGHTS = {
     'Human_receptors': 0.15
 }
 
+# --- Water Safeguarded Constants ---
+DOMESTIC_USE_M3 = 300        # avg. self-supplied withdrawal per well-year
+ACRE_FT_PER_M3 = 1/1233.5    # conversion factor
+
 # --- Data Downloading ---
 def download_and_unzip(url, target_dir, check_file):
     """Downloads and unzips a file if a check_file does not exist in the target directory."""
@@ -56,11 +60,11 @@ def run_risk_analysis(input_csv='wells_input.csv'):
     wells_gdf_proj = wells_gdf.to_crs(TARGET_CRS)
 
     dossier_data = {
-        3500320743: {'surface_casing_ft': 857, 'completion_year': 1982, 'aquifer_score': 25, 'surface_water_score': 18, 'casing_score': 15, 'spill_score': 9, 'receptors_score': 10},
-        3506121229: {'surface_casing_ft': 416, 'completion_year': 1998, 'aquifer_score': 25, 'surface_water_score': 18, 'casing_score': 15, 'spill_score': 5, 'receptors_score': 12},
-        3508320686: {'surface_casing_ft': 435, 'completion_year': 1977, 'aquifer_score': 15, 'surface_water_score': 10, 'casing_score': 8, 'spill_score': 5, 'receptors_score': 5},
-        3504723141: {'surface_casing_ft': 435, 'completion_year': 1982, 'aquifer_score': 15, 'surface_water_score': 4, 'casing_score': 8, 'spill_score': 5, 'receptors_score': 5},
-        3503921266: {'surface_casing_ft': 1511, 'completion_year': 1987, 'aquifer_score': 10, 'surface_water_score': 4, 'casing_score': 5, 'spill_score': 5, 'receptors_score': 2}
+        3500320743: {'surface_casing_ft': 857, 'completion_year': 1982, 'aquifer_score': 25, 'surface_water_score': 18, 'casing_score': 15, 'spill_score': 9, 'receptors_score': 10, 'domestic_wells_1km': 2},
+        3506121229: {'surface_casing_ft': 416, 'completion_year': 1998, 'aquifer_score': 25, 'surface_water_score': 18, 'casing_score': 15, 'spill_score': 5, 'receptors_score': 12, 'domestic_wells_1km': 4},
+        3508320686: {'surface_casing_ft': 435, 'completion_year': 1977, 'aquifer_score': 15, 'surface_water_score': 10, 'casing_score': 8, 'spill_score': 5, 'receptors_score': 5, 'domestic_wells_1km': 1},
+        3504723141: {'surface_casing_ft': 435, 'completion_year': 1982, 'aquifer_score': 15, 'surface_water_score': 4, 'casing_score': 8, 'spill_score': 5, 'receptors_score': 5, 'domestic_wells_1km': 0},
+        3503921266: {'surface_casing_ft': 1511, 'completion_year': 1987, 'aquifer_score': 10, 'surface_water_score': 4, 'casing_score': 5, 'spill_score': 5, 'receptors_score': 2, 'domestic_wells_1km': 0}
     }
     dossier_df = pd.DataFrame.from_dict(dossier_data, orient='index')
     wells_gdf_proj = wells_gdf_proj.join(dossier_df, on='API')
@@ -74,7 +78,7 @@ def run_risk_analysis(input_csv='wells_input.csv'):
 
     nhd_url = 'https://prd-tnm.s3.amazonaws.com/StagedProducts/Hydrography/NHD/State/Shape/NHD_H_Oklahoma_State_Shape.zip'
     nhd_dir = os.path.join(DATA_DIR, 'nhd_ok')
-    download_and_unzip(nhd_url, nhd_dir, 'Shape/NHDFlowline.shp')
+    download_and_unzip(nhd_url, nhd_dir, 'Shape/NHDFlowline_0.shp')
 
     print('\nLoading GIS layers into memory...')
     try:
@@ -138,6 +142,19 @@ def run_risk_analysis(input_csv='wells_input.csv'):
             metrics['risk_tier'] = 'Moderate'
         else:
             metrics['risk_tier'] = 'Low'
+            
+        # --- 5. Water Safeguarded Calculation ---
+        domestic_wells = metrics.get('domestic_wells_1km', 0)
+        if pd.isna(domestic_wells):
+            domestic_wells = 0
+            
+        water_safeguarded_m3 = domestic_wells * DOMESTIC_USE_M3 * (metrics['final_score'] / 100)
+        water_safeguarded_acft = water_safeguarded_m3 * ACRE_FT_PER_M3
+        
+        metrics['Water_Safeguarded_m3_yr'] = round(water_safeguarded_m3, 1)
+        metrics['Water_Safeguarded_acft_yr'] = round(water_safeguarded_acft, 3)
+        
+        print(f'  Water Safeguarded: {metrics["Water_Safeguarded_m3_yr"]} m³/yr ({metrics["Water_Safeguarded_acft_yr"]} ac-ft/yr)')
             
         results.append(metrics)
 

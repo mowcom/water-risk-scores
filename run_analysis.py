@@ -20,7 +20,9 @@ def save_outputs(final_df):
     output_csv_path = os.path.join(OUTPUT_DIR, 'water_risk_scores.csv')
     csv_cols = [
         'WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 
-        'surface_water_dist_m', 'surface_casing_ft', 'completion_year', 'Data_Gap_Flag'
+        'surface_water_dist_m', 'surface_casing_ft', 'completion_year', 
+        'domestic_wells_1km', 'Water_Safeguarded_m3_yr', 'Water_Safeguarded_acft_yr',
+        'Data_Gap_Flag'
     ]
     
     # Create a DataFrame with the correct index before saving
