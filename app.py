@@ -185,9 +185,15 @@ if results_df is not None:
     st.header("Per-Well Dossier")
     
     # --- Well Selector ---
+    # Get list of APIs and set SCHNITZER as default (API: 3500320743)
+    api_options = results_df['API'].tolist()
+    schnitzer_api = 3500320743
+    default_index = api_options.index(schnitzer_api) if schnitzer_api in api_options else 0
+    
     well_api = st.selectbox(
         'Select a well to view details:',
-        options=results_df['API'].tolist(),
+        options=api_options,
+        index=default_index,
         format_func=lambda api: f"{results_df.set_index('API').loc[api, 'WELL_NAME']} ({api})"
     )
 
