@@ -155,9 +155,9 @@ if results_df is not None:
         ### Real Example: KING-OH #38A Well
         1. **Risk Score**: 75 (High risk tier)
         2. **DRASTIC Factor**: 0.8 (High aquifer vulnerability)  
-        3. **Domestic Demand**: 6,308 m³/yr (4 nearby wells in Haskell County)
+        3. **Domestic Demand**: 7,252 m³/yr (4 nearby wells in Haskell County)
         4. **Leak Probability**: sigmoid(75) × 0.8 = 0.965 × 0.8 = 0.772
-        5. **Water Safeguarded**: 6,308 × 0.772 = **4,872 m³/yr (3.95 ac-ft/yr)**
+        5. **Water Safeguarded**: 7,252 × 0.772 = **5,602 m³/yr (4.54 ac-ft/yr)**
         
         ### Additional Metrics
         

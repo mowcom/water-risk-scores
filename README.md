@@ -29,13 +29,13 @@ The application now features an **enhanced Water Safeguarded calculation** that 
 
 | Well | Risk Score | Leak Prob | Distance-Weighted Demand | Enhanced Water Safeguarded |
 |------|------------|-----------|-------------------------|----------------------------|
-| KING-OH #38A | 75 (High) | 0.772 | 6,308 m³/yr | 3.95 ac-ft/yr |
-| SCHNITZER #2 | 77 (High) | 0.779 | 2,275 m³/yr | 1.44 ac-ft/yr |
-| BLAKE A-1 | 43 (Moderate) | 0.226 | 1,775 m³/yr | 0.33 ac-ft/yr |
+| KING-OH #38A | 75 (High) | 0.772 | 7,252 m³/yr | 4.54 ac-ft/yr |
+| SCHNITZER #2 | 77 (High) | 0.779 | 2,683 m³/yr | 1.69 ac-ft/yr |
+| BLAKE A-1 | 43 (Moderate) | 0.226 | 1,646 m³/yr | 0.30 ac-ft/yr |
 | RAYMOND #3-1 | 37 (Moderate) | 0.120 | 0 m³/yr | 0.00 ac-ft/yr |
 | JUDITH #1-2 | 26 (Low) | 0.031 | 0 m³/yr | 0.00 ac-ft/yr |
 
-**Total Enhanced Water Safeguarded**: 5.72 acre-feet/year
+**Total Enhanced Water Safeguarded**: 6.53 acre-feet/year
 
 ### Additional Metrics
 
