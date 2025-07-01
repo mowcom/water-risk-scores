@@ -90,7 +90,7 @@ if results_df is not None:
     st.header("Risk Assessment Results")
     st.markdown("The table below shows the final risk scores and tiers for each well.")
     
-    display_cols = ['WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 'surface_water_dist_m', 'completion_year', 'Water_Safeguarded_m3_yr', 'Water_Safeguarded_acft_yr']
+    display_cols = ['WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 'surface_water_dist_m', 'completion_year', 'domestic_wells_1km', 'Water_Safeguarded_m3_yr', 'Water_Safeguarded_acft_yr']
     st.dataframe(results_df.set_index('API')[display_cols])
 
     st.header("Per-Well Dossier")
