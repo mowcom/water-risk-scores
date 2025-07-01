@@ -60,10 +60,11 @@ def get_drastic_explanation():
     - **Low (0.4)**: Clay layers, deeper water table, good natural protection
     - **Very Low (0.2)**: Dense clay/shale, deep water table, excellent protection
     
-    #### Why Different Wells Have Different DRASTIC Scores:
-    - **SCHNITZER (0.2 - Very Low)**: Located in area with thick clay/shale layers providing excellent natural protection
-    - **BLAKE (0.8 - High)**: Located in area with more permeable geology, higher vulnerability
-    - **Geographic Variation**: Oklahoma has diverse geology - eastern areas often have more clay protection, western areas can be more permeable
+         #### Why Different Wells Have Different DRASTIC Scores:
+     - **SCHNITZER (1.0 - Very High)**: Located in area with highly permeable geology, minimal natural protection
+     - **BLAKE (1.0 - Very High)**: Also in highly permeable area with limited natural barriers
+     - **KING-OH (0.2 - Very Low)**: Located in area with thick clay/shale layers providing excellent protection
+     - **Geographic Variation**: Oklahoma has diverse geology - some areas have protective clay layers, others have permeable sand/gravel
     
     #### How It Affects Calculations:
     The DRASTIC factor multiplies the base leak probability:

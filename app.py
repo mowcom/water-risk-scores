@@ -29,7 +29,8 @@ def run_full_analysis():
         final_results_df, gis_data = run_risk_analysis()
         if final_results_df is not None:
             save_outputs(final_results_df)
-            generate_maps(final_results_df, gis_data)
+            # Only generate maps if they don't exist (efficiency improvement)
+            generate_maps(final_results_df, gis_data, force_regenerate=False)
             st.success("Enhanced analysis complete! Output files have been generated.")
         else:
             st.error("Analysis failed. Check the terminal for errors.")

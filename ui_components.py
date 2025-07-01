@@ -17,27 +17,20 @@ def render_sidebar():
     run_analysis = st.sidebar.button("Run New Analysis")
     refresh_data = st.sidebar.button("🔄 Clear Cache & Refresh Data")
     
-    st.sidebar.title("About")
-    st.sidebar.info("""
-    This app provides a reproducible workflow for screening environmental risks associated with orphan oil and gas wells.
+    st.sidebar.title("Quick Reference")
+    st.sidebar.markdown("""
+    **Risk Tiers:**
+    - 🔴 **High:** ≥60 points
+    - 🟡 **Moderate:** 30-59 points  
+    - 🟢 **Low:** <30 points
 
-    **Risk Tier Definitions:**
-    - **High:** Score >= 60
-    - **Moderate:** Score 30 - 59
-    - **Low:** Score < 30
-
-    **Water Safeguarded Metric:**
-    Estimates the annual volume of potable water supply that would be protected by plugging each well, using enhanced distance-weighted domestic demand modeling and DRASTIC vulnerability assessment.
+    **Component Weights:**
+    - Aquifer: 30%
+    - Surface Water: 20%
+    - Casing/Age: 20%
+    - Historical Spill: 15%
+    - Human Receptors: 15%
     """)
-    
-    st.sidebar.title("Scoring Weights")
-    st.sidebar.json({
-        'Aquifer': '30%',
-        'Surface Water': '20%',
-        'Casing/Age': '20%',
-        'Historical Spill': '15%',
-        'Human Receptors': '15%'
-    })
     
     return run_analysis, refresh_data
 
@@ -53,8 +46,7 @@ def render_main_table(results_df):
     ]
     st.dataframe(results_df.set_index('API')[display_cols])
 
-    # Water unit explanation
-    st.info("💧 **What is ac-ft/yr?** An acre-foot per year (ac-ft/yr) is the volume of water covering one acre to a depth of one foot annually. One acre-foot equals ~326,000 gallons or enough to supply 6-7 rural households for a year.")
+
 
 def render_methodology_section():
     """Render the detailed methodology explanation."""
@@ -186,7 +178,7 @@ def render_well_dossier(well_api, results_df):
                 st.metric(
                     label="Water Safeguarded", 
                     value=f"{water_safeguarded_acft:.3f} ac-ft/yr",
-                    help="Enhanced calculation: Annual volume of potable water supply protected by plugging this well. Uses distance-weighted domestic demand, DRASTIC vulnerability, and sigmoid leak probability modeling."
+                    help="💧 Enhanced calculation: Annual volume of potable water supply protected by plugging this well. Uses distance-weighted domestic demand, DRASTIC vulnerability, and sigmoid leak probability modeling.\n\n**What is ac-ft/yr?** An acre-foot per year is the volume of water covering one acre to a depth of one foot annually. One acre-foot equals ~326,000 gallons or enough to supply 6-7 rural households for a year."
                 )
                 
                 st.metric(
@@ -206,10 +198,25 @@ def render_enhanced_modeling_section(well_metrics):
     with enh_col1:
         drastic_class = well_metrics.get('Drastic_Class', 'N/A')
         drastic_factor = well_metrics.get('Drastic_Factor', 'N/A')
+        drastic_explanation = f"""🌍 DRASTIC Vulnerability Assessment: {drastic_class} ({drastic_factor})
+
+**DRASTIC factors considered:**
+- **D**epth to water table
+- **R**echarge rate  
+- **A**quifer media
+- **S**oil media
+- **T**opography
+- **I**mpact of vadose zone
+- **C**onductivity
+
+**{drastic_class} vulnerability** means this location has {'excellent natural protection' if drastic_factor <= 0.2 else 'good protection' if drastic_factor <= 0.4 else 'moderate protection' if drastic_factor <= 0.6 else 'limited protection' if drastic_factor <= 0.8 else 'very limited natural protection'} against groundwater contamination.
+
+This factor ({drastic_factor}) multiplies the base leak probability, where 1.0 = most vulnerable, 0.2 = best protected."""
+        
         st.metric(
             label="DRASTIC Vulnerability", 
             value=f"{drastic_class} ({drastic_factor})",
-            help=f"Aquifer vulnerability classification: {drastic_class} vulnerability means aquifer is {'more' if drastic_factor > 0.6 else 'moderately' if drastic_factor > 0.3 else 'less'} susceptible to surface contamination. Factor {drastic_factor} multiplies leak probability (1.0=most vulnerable, 0.2=least vulnerable)."
+            help=drastic_explanation
         )
         st.metric(
             label="Leak Probability", 
