@@ -42,7 +42,7 @@ def generate_well_report(well_data):
     pdf.add_page()
 
     # --- Well Details ---
-    pdf.chapter_title(f"Well Dossier: {well_data['WELL_NAME']} (API: {well_data['API']})")
+    pdf.chapter_title(f"Well Dossier: {well_data['WELL_NAME']} (API: {well_data.name})")
     details_body = f"County: {well_data['COUNTY']}\nCompletion Year: {well_data['completion_year']}"
     pdf.chapter_body(details_body)
 
