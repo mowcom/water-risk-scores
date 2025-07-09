@@ -24,7 +24,7 @@ def save_outputs(final_df):
         'live_aquifer_check', 'surface_water_dist_m', 'surface_casing_ft', 'completion_year', 
         'domestic_wells_1km', 'Drastic_Class', 'Drastic_Factor', 
         'Domestic_Demand_Wtd_m3_yr', 'P_Leak', 'Water_Safeguarded_m3_yr', 
-        'Water_Safeguarded_acft_yr', 'AI_primary_comparison', 'AI_gpt4_training_equivalent', 'AI_gpt4_queries_per_year', 'AI_claude_queries_per_year', 'AI_h100_cluster_hours',
+        'Water_Safeguarded_acft_yr', 'AI_primary_comparison', 'AI_gpt4_training_equivalent', 'AI_gpt4_queries_per_year', 'AI_claude_queries_per_year', 'AI_h100_cluster_hours', 'AI_gpt4_training_equivalent_str', 'AI_gpt4_queries_per_year_str', 'AI_claude_queries_per_year_str', 'AI_h100_cluster_hours_str',
         'Contaminant_Load_Removed_m3_yr', 'Data_Gap_Flag'
     ]
     

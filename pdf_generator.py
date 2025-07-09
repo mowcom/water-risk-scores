@@ -76,7 +76,7 @@ def generate_well_report(well_data):
     # --- AI Credit Buyer Summary ---
     pdf.chapter_title("AI Infrastructure Water Footprint Offset Certificate")
     ai_summary = (
-        f"This certificate verifies that by funding the plugging of orphan well {well_data['WELL_NAME']} (API: {well_data['API']}), "
+        f"This certificate verifies that by funding the plugging of orphan well {well_data['WELL_NAME']} (API: {well_data.name}), "
         f"your organization has directly contributed to safeguarding freshwater resources. This action serves as a tangible, "
         f"measurable offset to the water footprint of your AI and data center operations.\n\n"
         f"**Verified Impact:**\n"

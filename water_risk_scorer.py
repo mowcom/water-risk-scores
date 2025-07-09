@@ -134,13 +134,30 @@ def sigmoid_prob(score):
 
 def water_to_ai_compute_equivalent(water_m3_per_year):
     if water_m3_per_year <= 0:
-        return {'primary_comparison': 'No water safeguarded', 'gpt4_training_equivalent': 0, 'gpt4_queries_per_year': 0, 'claude_queries_per_year': 0, 'h100_cluster_hours': 0}
+        return {
+            'primary_comparison': 'No water safeguarded',
+            'gpt4_training_equivalent': 0,
+            'gpt4_queries_per_year': 0,
+            'claude_queries_per_year': 0,
+            'h100_cluster_hours': 0,
+            'gpt4_training_equivalent_str': '0x GPT-4 training',
+            'gpt4_queries_per_year_str': '0 GPT-4 queries',
+            'claude_queries_per_year_str': '0 Claude queries',
+            'h100_cluster_hours_str': '0 hours H100 cooling'
+        }
     equivalents = {
         'gpt4_training_equivalent': round(water_m3_per_year / 2500, 2),
         'gpt4_queries_per_year': int(water_m3_per_year / 0.0012),
         'claude_queries_per_year': int(water_m3_per_year / 0.0012),
         'h100_cluster_hours': int(water_m3_per_year / 0.05)
     }
+
+    # Generate formatted strings for each metric
+    equivalents['gpt4_training_equivalent_str'] = f"{equivalents['gpt4_training_equivalent']:.2f}x GPT-4 training"
+    equivalents['gpt4_queries_per_year_str'] = f"{equivalents['gpt4_queries_per_year']:,} GPT-4 queries"
+    equivalents['claude_queries_per_year_str'] = f"{equivalents['claude_queries_per_year']:,} Claude queries"
+    equivalents['h100_cluster_hours_str'] = f"{equivalents['h100_cluster_hours']:,} hours H100 cooling"
+
     if equivalents['gpt4_training_equivalent'] >= 1:
         equivalents['primary_comparison'] = f"≈ {equivalents['gpt4_training_equivalent']:.1f}× GPT-4 training water use"
     elif equivalents['gpt4_queries_per_year'] >= 1000000:
