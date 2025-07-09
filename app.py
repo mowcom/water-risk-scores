@@ -13,6 +13,7 @@ from ui_components import (
     render_well_selector,
     render_well_dossier
 )
+from pdf_generator import generate_well_report
 
 # --- App Configuration ---
 st.set_page_config(
@@ -80,46 +81,35 @@ if results_df is not None:
         
         with scores_col1:
             st.markdown(f"**{well_data_row['WELL_NAME']} Component Scores:**")
-            
-            # Calculate component scores from total (simplified for demonstration)
-            total_score = well_data_row['final_score']
-            aquifer_score = total_score * 0.30
-            surface_score = total_score * 0.20
-            casing_score = total_score * 0.20
-            spill_score = total_score * 0.15
-            receptor_score = total_score * 0.15
-            
-            st.write(f"- **Aquifer (30%)**: {aquifer_score:.1f}/30")
-            st.write(f"- **Surface Water (20%)**: {surface_score:.1f}/20") 
-            st.write(f"- **Casing/Age (20%)**: {casing_score:.1f}/20")
-            st.write(f"- **Historical Spill (15%)**: {spill_score:.1f}/15")
-            st.write(f"- **Human Receptors (15%)**: {receptor_score:.1f}/15")
-        
+            st.write(f"- **Aquifer Vulnerability (30 pts)**: {well_data_row['aquifer_score']:.1f}/30")
+            st.write(f"- **Surface Water Proximity (20 pts)**: {well_data_row['surface_water_score']:.1f}/20") 
+            st.write(f"- **Well Integrity (Age/Casing) (20 pts)**: {well_data_row['casing_age_score']:.1f}/20")
+            st.write(f"- **Historical Spills (15 pts)**: {well_data_row['spill_score']:.1f}/15")
+            st.write(f"- **Human Receptors (15 pts)**: {well_data_row['receptors_score']:.1f}/15")
+
         with scores_col2:
-            # Aquifer status with enhanced explanation - use JSON metrics data
-            from data_models import load_well_metrics
-            all_metrics = load_well_metrics()
-            well_metrics = all_metrics.get(str(well_api), {})
-            aquifer_status = well_metrics.get('live_aquifer_check', 'Unknown')
-            
+            # Display AI equivalent
+            st.info(f"**AI Offset Equivalent:**\n{well_data_row['AI_primary_comparison']}")
+
+            # Aquifer status
+            aquifer_status = well_data_row.get('live_aquifer_check', 'Unknown')
             if 'Intersect' in str(aquifer_status):
                 st.error(f"⚠️ **Aquifer Impact**: Well intersects live aquifer")
-                st.caption("This well penetrates an active groundwater aquifer, significantly increasing contamination risk to drinking water sources.")
             else:
                 st.success(f"✅ **Aquifer Impact**: No live aquifer intersection")
-                st.caption("This well does not penetrate major drinking water aquifers, reducing groundwater contamination risk.")
-            
-            # Quick DRASTIC summary for this specific well
-            drastic_factor = well_data_row.get('Drastic_Factor', 0.5)
-            protection_level = 'excellent' if drastic_factor <= 0.2 else 'good' if drastic_factor <= 0.4 else 'moderate' if drastic_factor <= 0.6 else 'limited' if drastic_factor <= 0.8 else 'very limited'
-            
-            st.info(f"""
-            **DRASTIC Summary for {well_data_row['WELL_NAME']}:**
-            
-            Geological conditions provide **{protection_level} natural protection** against groundwater contamination (factor: {drastic_factor}).
-            
-            See Enhanced Risk Modeling section above for detailed vulnerability metrics.
-            """)
+
+            # PDF Download Button
+            st.write("&nbsp;") # Add some space
+            if st.button("Generate PDF Report"):
+                with st.spinner("Generating report..."):
+                    pdf_path = generate_well_report(well_data_row)
+                    with open(pdf_path, "rb") as pdf_file:
+                        st.download_button(
+                            label="Download PDF Report",
+                            data=pdf_file,
+                            file_name=f"{well_api}_risk_report.pdf",
+                            mime="application/octet-stream"
+                        )
 
 else:
     st.warning("⚠️ No results found. Please run the analysis to generate risk assessment data.")

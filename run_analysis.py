@@ -20,11 +20,11 @@ def save_outputs(final_df):
     output_csv_path = os.path.join(OUTPUT_DIR, 'water_risk_scores.csv')
     csv_cols = [
         'WELL_NAME', 'COUNTY', 'final_score', 'risk_tier', 
-        'surface_water_dist_m', 'surface_casing_ft', 'completion_year', 
+        'aquifer_score', 'surface_water_score', 'casing_age_score', 'spill_score', 'receptors_score',
+        'live_aquifer_check', 'surface_water_dist_m', 'surface_casing_ft', 'completion_year', 
         'domestic_wells_1km', 'Drastic_Class', 'Drastic_Factor', 
         'Domestic_Demand_Wtd_m3_yr', 'P_Leak', 'Water_Safeguarded_m3_yr', 
-        'Water_Safeguarded_acft_yr', 'AI_GPT4_Training_Equivalent', 
-        'AI_GPT4_Queries_Per_Year', 'AI_Claude_Queries_Per_Year', 'AI_H100_Cluster_Hours', 'AI_Primary_Comparison',
+        'Water_Safeguarded_acft_yr', 'AI_primary_comparison', 'AI_gpt4_training_equivalent', 'AI_gpt4_queries_per_year',
         'Contaminant_Load_Removed_m3_yr', 'Data_Gap_Flag'
     ]
     
