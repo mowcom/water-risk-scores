@@ -89,7 +89,7 @@ if results_df is not None:
 
         with scores_col2:
             # Display AI equivalent
-            st.info(f"**AI Offset Equivalent:**\n{well_data_row['AI_primary_comparison']}")
+            st.markdown(f"<div style=\"background-color:#e0f7fa; padding:10px; border-radius:5px;\">"                        f"<h4 style=\"color:#00796b;\">AI Offset Equivalent:</h4>"                        f"<p style=\"color:#004d40;\">{well_data_row['AI_primary_comparison']}</p>"                        f"</div>", unsafe_allow_html=True)
 
             # Aquifer status
             aquifer_status = well_data_row.get('live_aquifer_check', 'Unknown')
