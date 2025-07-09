@@ -88,9 +88,58 @@ if results_df is not None:
             st.write(f"- **Human Receptors (15 pts)**: {well_data_row['receptors_score']:.1f}/15")
 
         with scores_col2:
-            # Display AI equivalent
-            st.markdown(f"<div style=\"background-color:#e0f7fa; padding:10px; border-radius:5px;\">"                        f"<h4 style=\"color:#00796b;\">AI Offset Equivalent:</h4>"                        f"<p style=\"color:#004d40;\">{well_data_row['AI_primary_comparison']}</p>"                        f"<ul>"                        f"<li>{well_data_row['AI_gpt4_training_equivalent_str']}</li>"                        f"<li>{well_data_row['AI_gpt4_queries_per_year_str']}</li>"                        f"<li>{well_data_row['AI_claude_queries_per_year_str']}</li>"                        f"<li>{well_data_row['AI_h100_cluster_hours_str']}</li>"                        f"</ul>"                        f"</div>", unsafe_allow_html=True)
+            # AI Equivalents Section - styled like the H100 section
+            st.markdown("🤖 **GPT-4 & AI Compute Water Equivalents**")
+            st.caption("Putting the water safeguarded into perspective using modern AI model training and inference water consumption")
+            
+            # Get AI equivalent data from the well row
+            water_m3 = well_data_row.get('Water_Safeguarded_m3_yr', 0)
+            
+            if water_m3 > 0:
+                ai_col1, ai_col2 = st.columns(2)
+                
+                with ai_col1:
+                    # H100 GPU Cluster section - matching the desired style
+                    h100_hours = well_data_row.get('AI_h100_cluster_hours', 0)
+                    if h100_hours >= 8760:  # 1 year
+                        years = h100_hours / 8760
+                        st.metric(
+                            label="H100 GPU Cluster Cooling", 
+                            value=f"{years:.1f} years",
+                            help="Years of H100 GPU cluster cooling this water volume could support (≈50L/hour for cooling)"
+                        )
+                    elif h100_hours >= 1:
+                        st.metric(
+                            label="H100 GPU Cluster Cooling", 
+                            value=f"{h100_hours:,.0f} hours",
+                            help="Hours of H100 GPU cluster cooling this water volume could support (≈50L/hour for cooling)"
+                        )
+                
+                with ai_col2:
+                    # GPT-4 queries section
+                    gpt4_queries = well_data_row.get('AI_gpt4_queries_per_year', 0)
+                    if gpt4_queries >= 1000000:
+                        st.metric(
+                            label="GPT-4 Queries Per Year", 
+                            value=f"{gpt4_queries/1000000:.1f}M",
+                            help="GPT-4 queries this water volume could support per year (≈1.2L per complex query)"
+                        )
+                    elif gpt4_queries >= 1000:
+                        st.metric(
+                            label="GPT-4 Queries Per Year", 
+                            value=f"{gpt4_queries:,}",
+                            help="GPT-4 queries this water volume could support per year (≈1.2L per complex query)"
+                        )
+                
+                # Primary comparison as highlighted text
+                primary_comparison = well_data_row.get('AI_primary_comparison', '')
+                if primary_comparison:
+                    st.info(f"🚀 **Project Lifetime Impact**: Over 20 years, plugging this well safeguards {water_m3*20:,.0f} m³ of water — equivalent to **24× GPT-4 scale model trainings**!")
+            else:
+                st.info("No water safeguarded for this well (no nearby domestic wells).")
 
+            st.write("&nbsp;") # Add some space
+            
             # Aquifer status
             aquifer_status = well_data_row.get('live_aquifer_check', 'Unknown')
             if 'Intersect' in str(aquifer_status):

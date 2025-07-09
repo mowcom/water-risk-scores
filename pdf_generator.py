@@ -42,7 +42,8 @@ def generate_well_report(well_data):
     pdf.add_page()
 
     # --- Well Details ---
-    pdf.chapter_title(f"Well Dossier: {well_data['WELL_NAME']} (API: {well_data.name})")
+    api_number = well_data.name  # API is the index, so use .name
+    pdf.chapter_title(f"Well Dossier: {well_data['WELL_NAME']} (API: {api_number})")
     details_body = f"County: {well_data['COUNTY']}\nCompletion Year: {well_data['completion_year']}"
     pdf.chapter_body(details_body)
 
@@ -75,8 +76,9 @@ def generate_well_report(well_data):
 
     # --- AI Credit Buyer Summary ---
     pdf.chapter_title("AI Infrastructure Water Footprint Offset Certificate")
+    api_number = well_data.name  # API is the index
     ai_summary = (
-        f"This certificate verifies that by funding the plugging of orphan well {well_data['WELL_NAME']} (API: {well_data.name}), "
+        f"This certificate verifies that by funding the plugging of orphan well {well_data['WELL_NAME']} (API: {api_number}), "
         f"your organization has directly contributed to safeguarding freshwater resources. This action serves as a tangible, "
         f"measurable offset to the water footprint of your AI and data center operations.\n\n"
         f"**Verified Impact:**\n"
@@ -90,13 +92,14 @@ def generate_well_report(well_data):
     # --- Map ---
     pdf.add_page()
     pdf.chapter_title("Geographic Risk Map")
-    map_path = f"output/{well_data['API']}_map.png"
+    api_number = well_data.name  # API is the index
+    map_path = f"output/{api_number}_map.png"
     try:
         pdf.image(map_path, x=10, y=None, w=190)
     except RuntimeError:
         pdf.chapter_body("Map image not found. Please ensure analysis has been run.")
 
     # --- Save PDF ---
-    output_path = f"output/{well_data['API']}_report.pdf"
+    output_path = f"output/{api_number}_report.pdf"
     pdf.output(output_path)
     return output_path
