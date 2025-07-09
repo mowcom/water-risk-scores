@@ -188,7 +188,6 @@ def render_well_dossier(well_api, results_df):
                 )
             
             render_enhanced_modeling_section(well_metrics)
-            render_ai_equivalents_section(well_metrics)
 
 def render_enhanced_modeling_section(well_metrics):
     """Render the enhanced risk modeling metrics."""
