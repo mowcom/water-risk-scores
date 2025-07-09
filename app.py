@@ -128,4 +128,4 @@ st.markdown("""
 - All water safeguarded calculations use distance-weighted domestic demand and sigmoid probability modeling
 - DRASTIC vulnerability factors are location-specific based on hydrogeological conditions
 - AI compute equivalents updated for GPT-4 and modern language models
-""") 
+""")
