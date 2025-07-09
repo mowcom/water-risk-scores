@@ -89,7 +89,7 @@ if results_df is not None:
 
         with scores_col2:
             # Display AI equivalent
-            st.markdown(f"<div style=\"background-color:#e0f7fa; padding:10px; border-radius:5px;\">"                        f"<h4 style=\"color:#00796b;\">AI Offset Equivalent:</h4>"                        f"<p style=\"color:#004d40;\">{well_data_row['AI_primary_comparison']}</p>"                        f"</div>", unsafe_allow_html=True)
+            st.markdown(f"<div style="background-color:#e0f7fa; padding:10px; border-radius:5px;">"                        f"<h4 style="color:#00796b;">AI Offset Equivalent:</h4>"                        f"<p style="color:#004d40;">{well_data_row['AI_primary_comparison']}</p>"                        f"<ul>"                        f"<li>GPT-4 Training: {well_data_row['AI_gpt4_training_equivalent']:.2f}x</li>"                        f"<li>GPT-4 Queries: {well_data_row['AI_gpt4_queries_per_year']:,}</li>"                        f"<li>Claude Queries: {well_data_row['AI_claude_queries_per_year']:,}</li>"                        f"<li>H100 Hours: {well_data_row['AI_h100_cluster_hours']:,}</li>"                        f"</ul>"                        f"</div>", unsafe_allow_html=True)
 
             # Aquifer status
             aquifer_status = well_data_row.get('live_aquifer_check', 'Unknown')

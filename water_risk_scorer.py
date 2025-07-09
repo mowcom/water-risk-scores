@@ -134,15 +134,21 @@ def sigmoid_prob(score):
 
 def water_to_ai_compute_equivalent(water_m3_per_year):
     if water_m3_per_year <= 0:
-        return {'primary_comparison': 'No water safeguarded', 'gpt4_training_equivalent': 0, 'gpt4_queries_per_year': 0}
+        return {'primary_comparison': 'No water safeguarded', 'gpt4_training_equivalent': 0, 'gpt4_queries_per_year': 0, 'claude_queries_per_year': 0, 'h100_cluster_hours': 0}
     equivalents = {
         'gpt4_training_equivalent': round(water_m3_per_year / 2500, 2),
-        'gpt4_queries_per_year': int(water_m3_per_year / 0.0012)
+        'gpt4_queries_per_year': int(water_m3_per_year / 0.0012),
+        'claude_queries_per_year': int(water_m3_per_year / 0.0012),
+        'h100_cluster_hours': int(water_m3_per_year / 0.05)
     }
     if equivalents['gpt4_training_equivalent'] >= 1:
         equivalents['primary_comparison'] = f"≈ {equivalents['gpt4_training_equivalent']:.1f}× GPT-4 training water use"
+    elif equivalents['gpt4_queries_per_year'] >= 1000000:
+        equivalents['primary_comparison'] = f"≈ {equivalents['gpt4_queries_per_year'] / 1000000:.1f}M GPT-4 queries/year"
+    elif equivalents['h100_cluster_hours'] >= 8760: # 1 year
+        equivalents['primary_comparison'] = f"≈ {equivalents['h100_cluster_hours'] / 8760:.1f} years of H100 cluster cooling"
     else:
-        equivalents['primary_comparison'] = f"≈ {equivalents['gpt4_queries_per_year']:,} GPT-4 queries/year"
+        equivalents['primary_comparison'] = f"≈ {equivalents['h100_cluster_hours']:,} hours of H100 cluster cooling"
     return equivalents
 
 # --- Core Analysis Function ---
